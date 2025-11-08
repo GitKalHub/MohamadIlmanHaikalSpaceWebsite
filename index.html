@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single-Page Switching Portfolio</title>
+    
+    <!-- Load Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for appearance (minimal, mostly Tailwind used) */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: none; 
+        }
+        /* Video Background Styling */
+        #video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%; 
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -10; /* Ensures content is above video */
+            background-color: #000; /* Fallback background color if video fails */
+            filter: brightness(50%); /* Dims the video so content is readable */
+            object-fit: cover; /* Ensures video covers the entire viewport */
+        }
+        /* Mobile Menu transition */
+        #mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%); /* Start hidden */
+        }
+        #mobile-menu.active {
+            transform: translateX(0); /* Slide in */
+        }
+        /* Active Nav Link Style */
+        .nav-link.active {
+            color: #60a5fa; /* Tailwind blue-400 */
+            font-weight: 600;
+        }
+        .desktop-nav .nav-link.active {
+            border-bottom: 2px solid #60a5fa;
+            padding-bottom: 4px;
+        }
+        /* Ensure content pages are opaque white for readability over the video */
+        .content-page {
+            /* Using a slightly opaque white background for readability over the dark video */
+            background-color: rgba(255, 255, 255, 0.95);
+            /* Base transition for opacity and transform, managed by JS classes */
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        /* Custom style for Text Outline/Stroke */
+        .text-stroke {
+            text-shadow: 
+                1px 1px 0 #000, 
+                -1px 1px 0 #000, 
+                1px -1px 0 #000, 
+                -1px -1px 0 #000;
+        }
+
+        /* Animation for the Header Title on hover */
+        #header-title:hover {
+            animation: pulse-light 1.5s infinite;
+        }
+        @keyframes pulse-light {
+            0%, 100% { 
+                transform: scale(1); 
+                text-shadow: 0 0 5px rgba(255, 255, 255, 0); 
+            }
+            50% { 
+                transform: scale(1.02); 
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8); /* Light glow effect */
+            }
+        }
+    </style>
+</head>
+<body id="top" class="min-h-screen flex flex-col">
+
+    <!-- Video Background -->
+<video autoplay muted loop id="video-background">
+        <!-- FIX: Renamed the source to be all lowercase and use dashes instead of spaces. -->
+        <!-- You MUST rename the physical file in your GitHub repository to 'video-page.mp4' -->
+        <source src="video-page.mp4" type="video/mp4"> 
+        Your browser does not support the video tag.
+    </video>
+
+    <!-- Header & Navigation -->
+<header class="bg-gray-800 text-white p-4 shadow-xl fixed top-0 left-0 right-0 z-40">
+        <div class="container mx-auto flex justify-between items-center">
+            <!-- Added ID for hover animation -->
+            <h1 id="header-title" class="text-2xl font-bold cursor-default transition duration-300">WELCOME TO ILMAN SPACE 🛰️</h1>
+            
+            <!-- Mobile Menu Toggle -->
+<button id="menu-toggle" class="md:hidden p-2 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-menu"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+            </button>
+            
+            <!-- Desktop Navigation -->
+<nav id="desktop-nav" class="hidden md:flex space-x-2 lg:space-x-4 items-center text-sm lg:text-base desktop-nav">
+                <a href="#about" class="nav-link active hover:text-blue-400 p-2 rounded-md transition duration-150">About</a>
+                <a href="#skills" class="nav-link hover:text-blue-400 p-2 rounded-md transition duration-150">Skills</a>
+                <a href="#experience" class="nav-link hover:text-blue-400 p-2 rounded-md transition duration-150">Experience</a>
+                <a href="#education" class="nav-link hover:text-blue-400 p-2 rounded-md transition duration-150">Education</a>
+                <a href="#resume" class="nav-link hover:text-blue-400 p-2 rounded-md transition duration-150">Resume</a>
+                <a href="#hobby" class="nav-link hover:text-blue-400 p-2 rounded-md transition duration-150">Hobby</a>
+                <a href="#contact" class="nav-link hover:text-blue-400 p-2 rounded-md transition duration-150">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Menu Sidebar -->
+<nav id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-gray-900 text-white z-50 p-6 shadow-xl md:hidden">
+        <div class="flex justify-end">
+            <button id="close-menu" class="text-white hover:text-red-400 p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+        </div>
+        <div class="mt-8 flex flex-col space-y-4">
+            <a href="#about" class="nav-link text-xl hover:text-blue-400 p-2 rounded-md">About</a>
+            <a href="#skills" class="nav-link text-xl hover:text-blue-400 p-2 rounded-md">Skills</a>
+            <a href="#experience" class="nav-link text-xl hover:text-blue-400 p-2 rounded-md">Experience</a>
+            <a href="#education" class="nav-link text-xl hover:text-blue-400 p-2 rounded-md">Education</a>
+            <a href="#resume" class="nav-link text-xl hover:text-blue-400 p-2 rounded-md">Resume</a>
+            <a href="#hobby" class="nav-link text-xl hover:text-blue-400 p-2 rounded-md">Hobby</a>
+            <a href="#contact" class="nav-link text-xl hover:text-blue-400 p-2 rounded-md">Contact</a>
+        </div>
+    </nav>
+
+
+    <!-- Main Content Area -->
+<div class="mt-20 container mx-auto my-6 p-4 flex-grow">
+
+        <main class="space-y-8">
+
+            <!-- About Section (Default visible state) -->
+<section id="about" class="content-page p-8 rounded-xl shadow-lg opacity-100 transform translate-y-0">
+                <div class="flex flex-col md:flex-row gap-6 items-start">
+                    
+                    <!-- Profile Picture -->
+<img src="Profile Photo.jpg" 
+                         alt="Mohamad Ilman Haikal Profile Photo" 
+                         class="w-24 h-24 md:w-32 md:h-32 rounded-lg object-cover flex-shrink-0 border-4 border-blue-500 shadow-xl"
+                         onerror="this.onerror=null; this.src='https://placehold.co/128x128/3B82F6/ffffff?text=ILMAN+PHOTO';"
+                    >
+                    <div>
+                        
+                        <h2 class="text-3xl font-extrabold text-blue-900 text-stroke mb-4 border-b pb-2">About Me</h2>
+                        <p class="text-gray-700 leading-relaxed mb-3">
+                            Hello! My name is Mohamad Ilman Haikal Bin Mohd Zaid, a passionate and dedicated individual with a strong foundation in Web Development 💻. I enjoy solving complex problems and transforming innovative ideas into functional realities.
+                        </p>
+                        <p class="text-gray-700 leading-relaxed">
+                            I am currently studying at UiTM Merbok, Kedah, pursuing a Diploma in Information Management 📚. Alongside my technical interests, I have a love for simple joys in life. My favourite kuih is Peneram 🍩, and I love drinking Watermelon Juice 🍉. I’m also a big fan of the colours blue, black, and white, which reflect my calm, focused, and stylish personality 🎨.
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-6 flex flex-wrap gap-3 text-lg font-medium">
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full shadow-sm">Music Lover 🎵</span>
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full shadow-sm">Passion for Adventure ⛰️</span>
+                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full shadow-sm">Social Media Explorer 📱</span>
+                </div>
+            </section>
+
+            <!-- Skills Section (Initial hidden state with fade-in preparation) -->
+<section id="skills" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
+                
+                <h2 class="text-3xl font-extrabold text-blue-900 text-stroke mb-4 border-b pb-2">Skills</h2>
+                
+                
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Technical Skills 🛠️</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Microsoft Office (Word, Excel, PowerPoint)</span>
+                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Information Handling</span>
+                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">AI Tool Proficiency</span>
+                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Digital Design</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Soft Skills 🧠</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Time Management</span>
+                            <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Communication</span>
+                            <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Teamwork</span>
+                            <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Adaptability</span>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">Languages 💬</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Malay</span>
+                            <span class="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">English</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </section>
+            
+            <!-- Experience Section (Initial hidden state with fade-in preparation) -->
+<section id="experience" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
+                
+                <h2 class="text-3xl font-extrabold text-blue-900 text-stroke mb-4 border-b pb-2">Experience</h2>
+                <div class="space-y-6">
+                    <div class="flex flex-col md:flex-row gap-6 items-start">
+                        
+                        <!-- Internship Picture with Square Border -->
+<img src="Intern.jpg" 
+                             alt="Internship at PPDKBB" 
+                             class="w-24 h-24 md:w-32 md:h-32 rounded-lg object-cover flex-shrink-0 border-4 border-blue-500 shadow-xl"
+                             onerror="this.onerror=null; this.src='https://placehold.co/128x128/3B82F6/ffffff?text=INTERN+PHOTO';"
+                        >
+                        <div>
+                            <h4 class="text-xl font-semibold">Intern 💼</h4>
+                            <p class="text-gray-500 italic">Pejabat Pendidikan Daerah Kulim Bandar Baharu (PPDKBB) | July 27 - Sep 18 2025</p>
+                            <ul class="list-disc list-inside text-gray-700 mt-2 space-y-1 ml-4">
+                                <li>Contributed to the development of digital and administrative solutions.</li>
+                                <li>Assisted in ICT support tasks and technical troubleshooting.</li>
+                                <li>Created Excel dashboards for efficient data management and reporting.</li>
+                                <li>Collaborated on event coordination and educational programs related to Canva, Government Website, and IT tools.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Education Section (Initial hidden state with fade-in preparation) -->
+<section id="education" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
+                
+                <h2 class="text-3xl font-extrabold text-blue-900 text-stroke mb-4 border-b pb-2">Education</h2>
+                <div class="space-y-6">
+                    
+                    <div>
+                        <h4 class="text-xl font-semibold">Diploma in Information Management 🎓(In Progress)</h4>
+                        <p class="text-gray-500 italic">Universiti Teknologi MARA (UiTM) | 2023 - Present</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-2 space-y-1 ml-4">
+                            <li>Currently pursuing a diploma with a focus on managing record, data management, and digital technologies.</li>
+                        </ul>
+                    </div>
+                    
+                    <div>
+                        <h4 class="text-xl font-semibold">High School Graduate ✏️(SPM)</h4>
+                        <p class="text-gray-500 italic">Sekolah Menengah Kebangsaan Junjung | 2018 - 2023</p>
+                        <ul class="list-disc list-inside text-gray-700 mt-2 space-y-1 ml-4">
+                            <li>Completed Sijil Pelajaran Malaysia (SPM).</li>
+                            <li>Achieved results: 4A, 3B, 2C.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Resume Section (Initial hidden state with fade-in preparation) -->
+<section id="resume" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
+                
+                <h2 class="text-3xl font-extrabold text-blue-900 text-stroke mb-4 border-b pb-2">My Resume</h2>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                    For a formal overview of my qualifications, please download the PDF copy of my resume.
+                </p>
+                <div class="mt-6 p-6 border-2 border-dashed border-blue-300 bg-blue-50 rounded-lg text-center">
+                    <p class="text-gray-800 text-lg mb-4">
+                        <span class="font-bold">File:</span> Mohamad\_Ilman\_Haikal\_Resume.pdf
+                    </p>
+                    
+                    <a href="Mohamad_Ilman_Haikal_Resume.pdf" 
+                       download="Mohamad_Ilman_Haikal_Resume.pdf"
+                       class="inline-block mt-3 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-150 shadow-md font-medium">Download Resume (PDF)</a>
+                </div>
+            </section>
+
+            <!-- Hobby Section (Initial hidden state with fade-in preparation) -->
+<section id="hobby" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
+                 
+                 <h2 class="text-3xl font-extrabold text-blue-900 text-stroke mb-4 border-b pb-2">Hobby & Interests</h2>
+                 <ul class="space-y-3 list-disc text-gray-700 ml-4">
+                    <li class="text-lg"><strong>Music Listening 🎶:</strong> Discovering new genres and artists, using music as a way to focus and relax during downtime.</li>
+                    <li class="text-lg"><strong>Nature Photography & Hiking ⛰️:</strong> Spending time outdoors to capture landscapes and wildlife, combining physical activity with creative expression.</li>
+                    <li class="text-lg"><strong>Gaming 🎮:</strong> Engaging in strategic multiplayer games to sharpen critical thinking, quick decision-making, and teamwork skills.</li>
+                    <li class="text-lg"><strong>Watching Series or Movies (Sci-Fi & Fantasy) 🍿:</strong> Exploring complex narratives and innovative visual effects in science fiction and fantasy films/series.</li>
+                 </ul>
+            </section>
+
+            <!-- Contact Section (Initial hidden state with fade-in preparation) -->
+<section id="contact" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
+                
+                <h2 class="text-3xl font-extrabold text-blue-900 text-stroke mb-4 border-b pb-2">Contact Me</h2>
+                <p class="text-gray-700 mb-6">I'm currently available for new opportunities. Feel free to reach out via any of the platforms below!</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Direct Contact</h3>
+                        
+                        
+                        <div class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-blue-600 mt-1 flex-shrink-0"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                            <p class="text-gray-700 break-all">
+                                <span class="font-bold block text-sm text-gray-500">Email</span>
+                                <a href="mailto:haikaljrpro@gmail.com" class="text-blue-600 hover:underline text-lg">haikaljrpro@gmail.com</a>
+                            </p>
+                        </div>
+
+                        
+                        <div class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-blue-600 mt-1 flex-shrink-0"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.63A2 2 0 0 1 4.08 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <p class="text-gray-700">
+                                <span class="font-bold block text-sm text-gray-500">Phone Number</span>
+                                <a href="tel:+60143252403" class="text-gray-700 hover:text-blue-600 text-lg">+60 143252403</a>
+                            </p>
+                        </div>
+                        
+                        
+                        <div class="flex items-start">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-blue-600 mt-1 flex-shrink-0"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <p class="text-gray-700 text-lg">
+                                <span class="font-bold block text-sm text-gray-500">Location</span>
+                                <a href="https://www.google.com/maps/search/?api=1&query=Kulim, Kedah, Malaysia" target="_blank" class="text-blue-600 hover:underline">Kulim, Kedah, Malaysia</a>
+                            </p>
+                        </div>
+                    </div>
+
+                    
+                    <div class="space-y-4">
+                         <h3 class="text-xl font-semibold text-gray-800 mb-3">Social Media</h3>
+                         
+                         
+                         <a href="https://linkedin.com/in/ilmnhaikl" target="_blank" class="flex items-center text-blue-700 hover:text-blue-500 transition duration-150 text-lg">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                            <span class="underline">linkedin.com/in/ilmnhaikl</span>
+                         </a>
+
+                         
+                         <a href="https://www.instagram.com/ilmnhaikl__?igsh=MXN1aW9leHZ1dTRmeQ==" target="_blank" class="flex items-center text-pink-600 hover:text-pink-400 transition duration-150 text-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+                            Instagram (@ilmnhaikl__)
+                         </a>
+
+                         
+                         <a href="https://www.facebook.com/share/1Cecgj891J/" target="_blank" class="flex items-center text-blue-600 hover:text-blue-400 transition duration-150 text-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                            Facebook
+                         </a>
+                         
+                         
+                         <a href="https://www.tiktok.com/@ilmnhaikl?_r=1&_t=ZS-919KVHQzUoc" target="_blank" class="flex items-center text-gray-800 hover:text-gray-600 transition duration-150 text-lg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>
+                            TikTok (@ilmnhaikl)
+                         </a>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+<footer class="bg-gray-800 text-white p-6 mt-auto">
+        <div class="container mx-auto text-center text-sm">
+            
+            <p>&copy; 2025 ILMAN SPACE. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Navigation and Transitions -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.getElementById('menu-toggle');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const closeMenu = document.getElementById('close-menu');
+            const contentPages = document.querySelectorAll('.content-page');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const transitionDuration = 500; // Matches CSS transition duration
+
+            // --- Mobile Menu Logic ---
+            const toggleMenu = () => {
+                mobileMenu.classList.toggle('active');
+                document.body.classList.toggle('overflow-hidden');
+            };
+
+            menuToggle.addEventListener('click', toggleMenu);
+            closeMenu.addEventListener('click', toggleMenu);
+
+
+            // --- Page Switching Logic (Updated for Transitions) ---
+            const switchPage = (targetId) => {
+                const currentPage = document.querySelector('.content-page:not(.hidden)');
+                const targetPage = document.querySelector(targetId);
+
+                if (currentPage === targetPage) return; // Already on the page
+
+                // 3. Update active state of navigation links
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === targetId) {
+                        link.classList.add('active');
+                    }
+                });
+
+                if (currentPage) {
+                    // 1. Start fade-out/slide-down transition for the current page
+                    currentPage.classList.remove('opacity-100', 'translate-y-0');
+                    currentPage.classList.add('opacity-0', 'translate-y-4');
+
+                    // 2. After the transition time, hide the element and show the new one
+                    setTimeout(() => {
+                        // Hide old page entirely
+                        currentPage.classList.add('hidden');
+                        
+                        // Show new page
+                        if (targetPage) {
+                            targetPage.classList.remove('hidden');
+                            
+                            // Force reflow to ensure CSS registers the change before applying the final state
+                            targetPage.offsetHeight; 
+                            
+                            // Start fade-in/slide-up transition for the new page
+                            targetPage.classList.remove('opacity-0', 'translate-y-4');
+                            targetPage.classList.add('opacity-100', 'translate-y-0');
+                            
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }
+                    }, transitionDuration); 
+
+                } else if (targetPage) {
+                    // Initial load: just show the target (if not already showing)
+                    targetPage.classList.remove('hidden', 'opacity-0', 'translate-y-4');
+                    targetPage.classList.add('opacity-100', 'translate-y-0');
+                }
+            };
+
+            // Event listener for all navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault(); 
+                    
+                    const targetId = link.getAttribute('href');
+                    
+                    switchPage(targetId);
+
+                    // If on mobile, close the menu after clicking a link
+                    if (mobileMenu.classList.contains('active')) {
+                        toggleMenu();
+                    }
+                });
+            });
+
+            // Handle initial load state
+            const initialHash = window.location.hash || '#about';
+            
+            // On initial load, set all pages to hidden/initial state first
+            contentPages.forEach(page => {
+                 page.classList.add('hidden', 'opacity-0', 'translate-y-4');
+                 page.classList.remove('opacity-100', 'translate-y-0');
+            });
+
+            // Then initiate the switch to show the correct page with a smooth entrance
+            switchPage(initialHash);
+            
+            console.log("Page transitions and animations have been added.");
+        });
+    </script>
+</body>
+</html>
