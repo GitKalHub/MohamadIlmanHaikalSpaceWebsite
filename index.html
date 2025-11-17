@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Single-Page Switching Portfolio</title>
+    <title>Ilman Haikal Personal Website</title>
     
     <!-- Load Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
@@ -51,7 +51,6 @@
         }
         /* Ensure content pages are opaque white for readability over the video */
         .content-page {
-            /* --- UPDATED FOR DARK THEME --- */
             /* Dark background (gray-900 equivalent) with slight transparency */
             background-color: rgba(17, 24, 39, 0.80); 
             color: #d1d5db; /* Default light text color (gray-300) */
@@ -76,45 +75,35 @@
 
         /* DYNAMIC GRADIENT STYLES  */
         .header-gradient-text {
-            /* 1. Define a wide background containing the loop of colors (Blue -> Purple -> Teal -> Blue) */
             background: linear-gradient(
                 90deg, 
                 #38bdf8, /* Sky Blue */
                 #a855f7, /* Violet/Purple */
                 #2dd4bf, /* Teal */
-                #38bdf8  /* Sky Blue (for smooth looping) */
+                #38bdf8 
             );
-            /* 2. Make the background much wider than the text container */
             background-size: 300% 100%;
-            
-            /* 3. Apply text clipping and color transparency */
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent; 
             -webkit-text-fill-color: transparent;
-            
-            /* 4. Add subtle white stroke for definition */
             -webkit-text-stroke: 0.5px #ffffff;
             text-stroke: 0.5px #ffffff;
-            font-weight: 700; /* Adjusted for Space Mono */
-            
-            /* 5. Apply the shifting animation */
-            animation: moving-gradient 4s ease infinite; /* 4 seconds for a smooth, slow shift */
+            font-weight: 700;
+            animation: moving-gradient 4s ease infinite; 
         }
         
-        /* KEYFRAMES FOR THE SHIFTING GRADIENT */
         @keyframes moving-gradient {
             0% {
-                background-position: 0% 50%; /* Start position */
+                background-position: 0% 50%; 
             }
             50% {
-                background-position: 100% 50%; /* Shift to the middle of the large background */
+                background-position: 100% 50%;
             }
             100% {
-                background-position: 0% 50%; /* Shift back for a smooth loop */
+                background-position: 0% 50%; 
             }
         }
-        /* END DYNAMIC GRADIENT STYLES */
 
         /* Animation for the Header Title on hover (Kept for extra glow) */
         #header-title:hover {
@@ -130,12 +119,47 @@
                 text-shadow: 0 0 20px rgba(100, 180, 255, 1); 
             }
         }
+
+        /* --- ACCORDION STYLES --- */
+        .accordion-content {
+            /* Initial state: no height, no padding */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+            padding-top: 0;
+            /* ADDED: Force vertical padding to 0 when inactive */
+            padding-bottom: 0;
+        }
+        .accordion-content.active {
+            /* Expanded state: large height, restore padding */
+            max-height: 1000px; /* Increased max-height to handle images and player */
+            padding-top: 1rem;
+            /* ADDED: Restore padding-bottom for all active accordions */
+            padding-bottom: 1rem;
+        }
+        .accordion-toggle {
+            cursor: pointer;
+            user-select: none; /* Prevent text selection when clicking */
+            padding: 0.75rem 0.5rem; /* Make the click area larger */
+        }
+        .arrow-icon {
+            transition: transform 0.3s ease;
+        }
+        .rotate-90 {
+            transform: rotate(90deg);
+        }
+        /* Highlight active section/item */
+        .accordion-item.active-item {
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); /* blue-500 glow */
+            border-color: #3b82f6; /* blue-500 border */
+        }
     </style>
 </head>
 <body id="top" class="min-h-screen flex flex-col">
 
     <!-- Video Background -->
 <video autoplay muted loop id="video-background">
+        <!-- NOTE: Optimize this video file (<5MB recommended) -->
         <source src="video-page.mp4" type="video/mp4"> 
         Your browser does not support the video tag.
     </video>
@@ -193,7 +217,7 @@
 <section id="about" class="content-page p-8 rounded-xl shadow-lg opacity-100 transform translate-y-0">
                 <div class="flex flex-col md:flex-row gap-6 items-start">
                     
-                    <!-- Profile Picture (UPDATED SIZE) -->
+                    <!-- Profile Picture (NOTE: Optimize 'Profile Photo.jpg' for web, use ~100kb) -->
 <img src="Profile Photo.jpg" 
                          alt="Mohamad Ilman Haikal Profile Photo" 
                          class="w-36 h-36 md:w-48 md:h-48 rounded-lg object-cover flex-shrink-0 border-4 border-blue-900 shadow-xl"
@@ -201,8 +225,7 @@
                     >
                     <div>
                         
-                        <!-- Removed explicit text color (text-blue-900) to inherit light color from CSS rule -->
-<h2 class="text-3xl font-bold text-stroke mb-4 border-b border-gray-700 pb-2">About Me</h2>
+                        <h2 class="text-3xl font-bold text-stroke mb-4 border-b border-gray-700 pb-2">About Me</h2>
                         <p class="leading-relaxed mb-3">
                             Hello! My name is Mohamad Ilman Haikal Bin Mohd Zaid, I am currently 20 years old. I live in Kampung Ayer Puteh, Junjung, 09000 Kulim, Kedah. I enjoy solving complex problems and transforming innovative ideas into functional realities 💻.
                         </p>
@@ -211,113 +234,202 @@
                         </p>
                     </div>
                 </div>
-                <div class="mt-6 flex flex-wrap gap-3 text-lg font-medium">
-                    <!-- CHANGED: Added ID, cursor-pointer, and hover effect for clickability -->
-                    <span id="music-button" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full shadow-sm cursor-pointer hover:bg-blue-200 transition duration-150">
-                        Music Lover 🎵
-                    </span>
-                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full shadow-sm">Passion for Adventure ⛰️</span>
-                    <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full shadow-sm">Social Media Explorer 📱</span>
-                </div>
                 
-                <!-- NEW: Hidden Audio Player for the MP3 file -->
-                <audio id="audio-player" preload="auto">
-                    <source src="Danger Line.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
+                <!-- NEW: Key Attributes Section -->
+                <div class="mt-6 border-t border-gray-700 pt-4">
+                    <h3 class="text-xl font-semibold text-blue-400 mb-3">Key Attributes</h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="p-3 bg-gray-800 rounded-lg border border-yellow-500/50 shadow-md">
+                            <p class="text-lg font-bold text-yellow-300">Digital Strategist 💡</p>
+                            <p class="text-xs text-gray-400">Transforming innovative ideas into practical digital solutions.</p>
+                        </div>
+                        <div class="p-3 bg-gray-800 rounded-lg border border-purple-500/50 shadow-md">
+                            <p class="text-lg font-bold text-purple-300">Information Curator 💾</p>
+                            <p class="text-xs text-gray-400">Adept at organizing, managing, and structuring complex data.</p>
+                        </div>
+                        <div class="p-3 bg-gray-800 rounded-lg border border-green-500/50 shadow-md">
+                            <p class="text-lg font-bold text-green-300">Detail-Oriented Learner 🔎</p>
+                            <p class="text-xs text-gray-400">Committed to fast, effective skill acquisition and process optimization.</p>
+                        </div>
+                    </div>
+                </div>
             </section>
 
-            <!-- Skills Section (Initial hidden state with fade-in preparation) -->
+            <!-- Skills Section -->
 <section id="skills" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
                 
                 <h2 class="text-3xl font-bold text-stroke mb-4 border-b border-gray-700 pb-2">Skills</h2>
                 
-                
-                <div class="space-y-6">
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-200 mb-2">Technical Skills 🛠️</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Microsoft Office (Word, Excel, PowerPoint)</span>
-                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Information Handling</span>
-                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">AI Tool Proficiency</span>
-                            <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Digital Design</span>
+                <div class="space-y-4">
+                    
+                    <!-- 1. Technical Skills Accordion Item -->
+                    <div class="accordion-item border border-gray-700 rounded-xl bg-gray-800/50 hover:border-blue-500/50 transition duration-200">
+                        <div class="flex justify-between items-center accordion-toggle" data-target="technical-details">
+                            <h3 class="text-xl font-semibold text-gray-200">Technical Skills 🛠️</h3>
+                            <svg class="w-6 h-6 text-blue-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                        <div id="technical-details" class="accordion-content px-4">
+                            <p class="text-gray-400 mb-3">Core competencies in digital tools and information handling.</p>
+                            <div class="flex flex-wrap gap-2 pb-4">
+                                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Microsoft Office (Word, Excel, PowerPoint)</span>
+                                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Information Handling</span>
+                                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">AI Tool Proficiency</span>
+                                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Digital Design (Canva/Basic Editing)</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-200 mb-2">Soft Skills 🧠</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Time Management</span>
-                            <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Communication</span>
-                            <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Teamwork</span>
-                            <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Adaptability</span>
+                    <!-- 2. Soft Skills Accordion Item -->
+                    <div class="accordion-item border border-gray-700 rounded-xl bg-gray-800/50 hover:border-blue-500/50 transition duration-200">
+                        <div class="flex justify-between items-center accordion-toggle" data-target="soft-details">
+                            <h3 class="text-xl font-semibold text-gray-200">Soft Skills 🧠</h3>
+                            <svg class="w-6 h-6 text-blue-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                        <div id="soft-details" class="accordion-content px-4">
+                            <p class="text-gray-400 mb-3">Interpersonal and management abilities honed through projects and activities.</p>
+                            <div class="flex flex-wrap gap-2 pb-4">
+                                <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Time Management</span>
+                                <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Communication</span>
+                                <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Teamwork & Collaboration</span>
+                                <span class="bg-green-100 text-green-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Adaptability & Fast Learning</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <div>
-                        <h3 class="text-xl font-semibold text-gray-200 mb-2">Languages 💬</h3>
-                        <div class="flex flex-wrap gap-2">
-                            <span class="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Malay</span>
-                            <span class="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">English</span>
+                    <!-- 3. Languages Accordion Item -->
+                    <div class="accordion-item border border-gray-700 rounded-xl bg-gray-800/50 hover:border-blue-500/50 transition duration-200">
+                        <div class="flex justify-between items-center accordion-toggle" data-target="language-details">
+                            <h3 class="text-xl font-semibold text-gray-200">Languages 💬</h3>
+                            <svg class="w-6 h-6 text-blue-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                        <div id="language-details" class="accordion-content px-4">
+                            <p class="text-gray-400 mb-3">Effective communication across multiple languages.</p>
+                            <div class="flex flex-wrap gap-2 pb-4">
+                                <span class="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">Malay </span>
+                                <span class="bg-purple-100 text-purple-800 text-sm font-medium px-3 py-1 rounded-full shadow-sm">English </span>
+                            </div>
                         </div>
                     </div>
                 </div>
-                
             </section>
             
-            <!-- Experience Section (Initial hidden state with fade-in preparation) -->
+            <!-- Experience Section -->
 <section id="experience" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
                 
                 <h2 class="text-3xl font-bold text-stroke mb-4 border-b border-gray-700 pb-2">Experience</h2>
-                <div class="space-y-6">
-                    <div class="flex flex-col md:flex-row gap-6 items-start">
+                
+                <div class="space-y-4">
+                    
+                    <!-- Internship Accordion Item -->
+                    <div class="accordion-item border border-gray-700 rounded-xl bg-gray-800/50 hover:border-blue-500/50 transition duration-200">
+                        <div class="flex justify-between items-center accordion-toggle" data-target="internship-details">
+                            <div class="flex flex-col md:flex-row items-start md:items-center gap-2">
+                                <h4 class="text-xl font-semibold text-gray-200">Intern 💼</h4>
+                                <p class="text-gray-400 italic text-sm md:text-base">@ Pejabat Pendidikan Daerah Kulim Bandar Baharu (PPDKBB)</p>
+                            </div>
+                            <svg class="w-6 h-6 text-blue-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
                         
-                        <!-- Internship Picture with Square Border (UPDATED SIZE) -->
-<img src="Intern.jpg" 
-                             alt="Internship at PPDKBB" 
-                             class="w-36 h-36 md:w-48 md:h-48 rounded-lg object-cover flex-shrink-0 border-4 border-blue-900 shadow-xl"
-                             onerror="this.onerror=null; this.src='https://placehold.co/128x128/3B82F6/ffffff?text=INTERN+PHOTO';"
-                        >
-                        <div>
-                            <h4 class="text-xl font-semibold text-gray-200">Intern 💼</h4>
-                            <p class="text-gray-400 italic">Pejabat Pendidikan Daerah Kulim Bandar Baharu (PPDKBB) | July 27 - Sep 18 2025</p>
-                            <ul class="list-disc list-inside mt-2 space-y-1 ml-4">
-                                <li>Contributed to the development of digital and administrative solutions.</li>
-                                <li>Assisted in ICT support tasks and technical troubleshooting.</li>
-                                <li>Created Excel dashboards for efficient data management and reporting.</li>
-                                <li>Collaborated on event coordination and educational programs related to Canva, Government Website, and IT tools.</li>
-                            </ul>
+                        <div id="internship-details" class="accordion-content px-4">
+                            <div class="flex flex-col md:flex-row gap-6 items-center md:items-start pt-2">
+                                <!-- UPDATED: Internship Logo (PPDKBB - Building/Office) -->
+                                <div class="w-24 h-24 flex-shrink-0 border-4 border-blue-600/50 rounded-full bg-gray-900 shadow-xl overflow-hidden">
+                                    <!-- REPLACED SVG with IMG tag -->
+                                    <img src="ppdkbb-logo.jpg" 
+                                         alt="PPDKBB Logo" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null; this.src='https.placehold.co/96x96/022c5e/ffffff?text=PPDKBB';">
+                                </div>
+                                
+                                <div>
+                                    <p class="text-gray-400 mb-2 font-bold">July 27 - Sep 18 2025 (8 Weeks)</p>
+                                    <ul class="list-disc list-inside mt-2 space-y-1 ml-4 text-gray-300">
+                                        <li>Contributed to the development of digital and administrative solutions (e.g., using MS Office, Canva).</li>
+                                        <li>Assisted in ICT support tasks and technical troubleshooting.</li>
+                                        <li>Created Excel dashboards for efficient data management and reporting.</li>
+                                        <li>Collaborated on event coordination and educational programs related to Canva, Government Website, and IT tools.</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Education Section (Initial hidden state with fade-in preparation) -->
+            <!-- Education Section -->
 <section id="education" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
                 
                 <h2 class="text-3xl font-bold text-stroke mb-4 border-b border-gray-700 pb-2">Education</h2>
-                <div class="space-y-6">
+                
+                <div class="space-y-4">
                     
-                    <div>
-                        <h4 class="text-xl font-semibold text-gray-200">Diploma in Information Management 🎓(In Progress)</h4>
-                        <p class="text-gray-400 italic">Universiti Teknologi MARA (UiTM) | 2023 - Present</p>
-                        <ul class="list-disc list-inside mt-2 space-y-1 ml-4">
-                            <li>Currently pursuing a diploma with a focus on managing record, data management, and digital technologies.</li>
-                        </ul>
+                    <!-- Diploma Accordion Item -->
+                    <div class="accordion-item border border-gray-700 rounded-xl bg-gray-800/50 hover:border-blue-500/50 transition duration-200">
+                        <div class="flex justify-between items-center accordion-toggle" data-target="diploma-details">
+                            <div class="flex flex-col items-start">
+                                <h4 class="text-xl font-semibold text-gray-200">Diploma in Information Management 🎓</h4>
+                                <p class="text-gray-400 italic text-sm">Universiti Teknologi MARA (UiTM) | 2023 - Present</p>
+                            </div>
+                            <svg class="w-6 h-6 text-blue-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                        
+                        <div id="diploma-details" class="accordion-content px-4">
+                            <div class="flex flex-col md:flex-row gap-6 items-center md:items-start pt-2">
+                                <!-- NEW: Diploma Logo (UiTM - Graduation Cap) -->
+                                <div class="w-24 h-24 flex-shrink-0 border-4 border-gray-500 rounded-full bg-gray-900 shadow-xl overflow-hidden">
+                                    <!-- REPLACED SVG with IMG tag -->
+                                    <img src="uitm-logo.png" 
+                                         alt="UiTM Logo" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null; this.src='https://placehold.co/96x96/4b5563/ffffff?text=UiTM';">
+                                </div>
+                                
+                                <div>
+                                    <p class="text-gray-300 mb-2">My focus is on managing records, data management, and harnessing digital technologies.</p>
+                                    <ul class="list-disc list-inside mt-2 space-y-1 ml-4 text-gray-300 pb-4">
+                                        <li>Key Modules: Information Systems, Records Management, Digital Libraries.</li>
+                                        <li>Current Goal: Achieve high academic standing and apply theoretical knowledge practically.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div>
-                        <h4 class="text-xl font-semibold text-gray-200">High School Graduate ✏️(SPM)</h4>
-                        <p class="text-gray-400 italic">Sekolah Menengah Kebangsaan Junjung | 2018 - 2023</p>
-                        <ul class="list-disc list-inside mt-2 space-y-1 ml-4">
-                            <li>Completed Sijil Pelajaran Malaysia (SPM).</li>
-                            <li>Achieved results: 4A, 3B, 2C.</li>
-                        </ul>
+                    <!-- High School Accordion Item -->
+                    <div class="accordion-item border border-gray-700 rounded-xl bg-gray-800/50 hover:border-blue-500/50 transition duration-200">
+                        <div class="flex justify-between items-center accordion-toggle" data-target="highschool-details">
+                            <div class="flex flex-col items-start">
+                                <h4 class="text-xl font-semibold text-gray-200">High School Graduate ✏️ (SPM)</h4>
+                                <p class="text-gray-400 italic text-sm">Sekolah Menengah Kebangsaan Junjung | 2018 - 2023</p>
+                            </div>
+                            <svg class="w-6 h-6 text-blue-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                        
+                        <div id="highschool-details" class="accordion-content px-4">
+                             <div class="flex flex-col md:flex-row gap-6 items-center md:items-start pt-2">
+                                <!-- NEW: High School Logo (SMK Junjung - School Icon) -->
+                                <div class="w-24 h-24 flex-shrink-0 border-4 border-gray-700 rounded-full bg-gray-900 shadow-xl overflow-hidden">
+                                    <!-- REPLACED SVG with IMG tag -->
+                                    <img src="smk-junjung-logo.png" 
+                                         alt="SMK Junjung Logo" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.onerror=null; this.src='https://placehold.co/96x96/374151/ffffff?text=SMKJ';">
+                                </div>
+                                 
+                                <div>
+                                    <p class="text-gray-300 mb-2">Completed Sijil Pelajaran Malaysia (SPM) with strong results.</p>
+                                    <ul class="list-disc list-inside mt-2 space-y-1 ml-4 text-gray-300 pb-4">
+                                        <li>Academic Achievement: Achieved 4A, 3B, 2C in final exams.</li>
+                                        <li>Extra-Curricular: Active participant in the school's ICT club.</li>
+                                    </ul>
+                                </div>
+                             </div>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Resume Section (Initial hidden state with fade-in preparation) -->
+            <!-- Resume Section -->
 <section id="resume" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
                 
                 <h2 class="text-3xl font-bold text-stroke mb-4 border-b border-gray-700 pb-2">My Resume</h2>
@@ -335,19 +447,126 @@
                 </div>
             </section>
 
-            <!-- Hobby Section (Initial hidden state with fade-in preparation) -->
+            <!-- Hobby Section (UPDATED: Music Player & Image Added) -->
 <section id="hobby" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
                  
                  <h2 class="text-3xl font-bold text-stroke mb-4 border-b border-gray-700 pb-2">Hobby & Interests</h2>
-                 <ul class="space-y-3 list-disc ml-4">
-                    <li class="text-lg"><strong>Music Listening 🎶:</strong> Discovering new genres and artists, using music as a way to focus and relax during downtime.</li>
-                    <li class="text-lg"><strong>Nature Photography & Hiking ⛰️:</strong> Spending time outdoors to capture landscapes and wildlife, combining physical activity with creative expression.</li>
-                    <li class="text-lg"><strong>Gaming 🎮:</strong> Engaging in strategic multiplayer games to sharpen critical thinking, quick decision-making, and teamwork skills.</li>
-                    <li class="text-lg"><strong>Watching Series or Movies (Sci-Fi & Fantasy) 🍿:</strong> Exploring complex narratives and innovative visual effects in science fiction and fantasy films/series.</li>
-                 </ul>
+                 
+                 <div class="space-y-4">
+                     
+                     <!-- 1. Music Accordion Item (Now contains detailed player and image) -->
+                    <div class="accordion-item border border-gray-700 rounded-xl bg-gray-800/50 hover:border-blue-500/50 transition duration-200">
+                        <div class="flex justify-between items-center accordion-toggle" data-target="hobby-music">
+                            <h4 class="text-xl font-semibold text-gray-200">Music Listening 🎶</h4>
+                            <svg class="w-6 h-6 text-blue-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                        <div id="hobby-music" class="accordion-content px-4 text-gray-300 pb-4">
+                            <div class="flex flex-col md:flex-row gap-6 items-start">
+                                <p class="mb-4 flex-grow">Listening to Avenged Sevenfold’s ‘Danger Line’ inspires me to explore new genres and artists, using music as a way to stay focused and relaxed during downtime. I’m especially drawn to metal and ambient electronic music, which help me balance energy and calmness in my day.</p>
+                                
+                                <!-- Image Placeholder for Music -->
+                                <!-- NOTE: Use a placeholder image here until you have your own -->
+                                <img src="MusicListening.png" 
+                                     alt="Music Listening Image" 
+                                     class="w-full md:w-56 h-auto md:h-36 object-cover rounded-lg flex-shrink-0 border-2 border-indigo-500/50 shadow-md"
+                                     onerror="this.onerror=null; this.src='music image.png';"
+                                >
+                            </div>
+                            
+                            <!-- Music Player UI -->
+                            <div class="mt-4 p-3 bg-gray-900 rounded-lg border border-blue-600/50">
+                                <span class="text-sm font-semibold text-blue-400 block mb-2">Track: Danger Line.mp3 </span>
+                                <!-- NOTE: Optimize 'Danger Line.mp3' for web, use ~3MB) -->
+                                <div class="flex items-center gap-4">
+                                    <!-- Play/Pause Button with Icons -->
+                                    <button id="music-toggle-btn" 
+                                            class="p-2 w-10 h-10 flex items-center justify-center bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition duration-150">
+                                        <!-- Play Icon (Default) -->
+                                        <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-play"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                                        <!-- Pause Icon (Hidden) -->
+                                        <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pause hidden"><rect width="4" height="16" x="6" y="4"/><rect width="4" height="16" x="14" y="4"/></svg>
+                                    </button>
+                                    
+                                    <!-- Visual Status Bar (ASCII) -->
+                                    <span id="music-status-bar" class="text-xl font-mono text-gray-400 transition duration-300">
+                                        •၊၊||၊|။||||။ ၊|• 
+                                    </span>
+
+                                    <!-- Time Status -->
+                                    <span id="music-time" class="text-sm text-gray-400 font-mono">
+                                        0:00 / 0:00
+                                    </span>
+                                </div>
+                            </div>
+                            
+                            <!-- Hidden Audio Player -->
+                            <audio id="audio-player" preload="auto">
+                                <source src="Danger Line.mp3" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        </div>
+                    </div>
+                    
+                    <!-- 2. Photography/Hiking Accordion Item (Image Added) -->
+                    <div class="accordion-item border border-gray-700 rounded-xl bg-gray-800/50 hover:border-blue-500/50 transition duration-200">
+                        <div class="flex justify-between items-center accordion-toggle" data-target="hobby-nature">
+                            <h4 class="text-xl font-semibold text-gray-200">Nature Photography & Hiking ⛰️</h4>
+                            <svg class="w-6 h-6 text-blue-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                        <div id="hobby-nature" class="accordion-content px-4 text-gray-300 pb-4">
+                            <div class="flex flex-col md:flex-row gap-6 items-start">
+                                <p>Hiking at Gunung Baling allows me to capture stunning landscapes and wildlife, blending physical adventure with creative expression. The experience always refreshes my mind and gives me a clearer focus for my technical studies.</p>
+                                <!-- Image Placeholder for Nature -->
+                                <img src="Nature.png" 
+                                     alt="Nature Photography Image" 
+                                     class="w-full md:w-56 h-auto md:h-36 object-cover rounded-lg flex-shrink-0 border-2 border-green-500/50 shadow-md"
+                                     onerror="this.onerror=null; this.src='nature.png';"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3. Gaming Accordion Item (Image Added) -->
+                    <div class="accordion-item border border-gray-700 rounded-xl bg-gray-800/50 hover:border-blue-500/50 transition duration-200">
+                        <div class="flex justify-between items-center accordion-toggle" data-target="hobby-gaming">
+                            <h4 class="text-xl font-semibold text-gray-200">Gaming 🎮</h4>
+                            <svg class="w-6 h-6 text-blue-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                        <div id="hobby-gaming" class="accordion-content px-4 text-gray-300 pb-4">
+                            <div class="flex flex-col md:flex-row gap-6 items-start">
+                                <p>Mobile Legends keeps me engaged with its strategic multiplayer battles that sharpen my critical thinking, quick decision-making, and teamwork skills. I especially enjoy its blend of strategy and RPG elements, which makes every match exciting and challenging.</p>
+                                <!-- Image Placeholder for Gaming -->
+                                <img src="Gaming.png" 
+                                     alt="Gaming Setup Image" 
+                                     class="w-full md:w-56 h-auto md:h-36 object-cover rounded-lg flex-shrink-0 border-2 border-red-500/50 shadow-md"
+                                     onerror="this.onerror=null; this.src='gaming.png';"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 4. Movies/Series Accordion Item (Image Added) -->
+                    <div class="accordion-item border border-gray-700 rounded-xl bg-gray-800/50 hover:border-blue-500/50 transition duration-200">
+                        <div class="flex justify-between items-center accordion-toggle" data-target="hobby-series">
+                            <h4 class="text-xl font-semibold text-gray-200">Watching Series or Movies 🍿</h4>
+                            <svg class="w-6 h-6 text-blue-400 arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </div>
+                        <div id="hobby-series" class="accordion-content px-4 text-gray-300 pb-4">
+                            <div class="flex flex-col md:flex-row gap-6 items-start">
+                                <p>Interstellar captivates me with its complex narrative and breathtaking, innovative visual elements. The film blends science fiction with deep emotional storytelling, making it both inspiring and incredibly calming to watch. It’s my favourite movie because it expands the imagination while touching the heart.</p>
+                                <!-- Image Placeholder for Movies/Series -->
+                                <img src="Movies.png" 
+                                     alt="Movie/Series Watching Image" 
+                                     class="w-full md:w-56 h-auto md:h-36 object-cover rounded-lg flex-shrink-0 border-2 border-yellow-500/50 shadow-md"
+                                     onerror="this.onerror=null; this.src='series.png';"
+                                >
+                            </div>
+                        </div>
+                    </div>
+                 </div>
             </section>
 
-            <!-- Contact Section (Initial hidden state with fade-in preparation) -->
+            <!-- Contact Section -->
 <section id="contact" class="content-page p-8 rounded-xl shadow-lg hidden opacity-0 transform translate-y-4">
                 
                 <h2 class="text-3xl font-bold text-stroke mb-4 border-b border-gray-700 pb-2">Contact Me</h2>
@@ -363,7 +582,6 @@
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-blue-400 mt-1 flex-shrink-0"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                             <p class="break-all">
                                 <span class="font-bold block text-sm text-gray-400">Email</span>
-                                <!-- UPDATED: Using the specific Gmail compose URL and target="_blank" -->
                                 <a href="https://mail.google.com/mail/u/0/#inbox?compose=GTvVlcSDbFTGmlGbKjVKzLwCXPflwZckSXcfktvgrnbftHcNwsrGFDlsnpjFkMDlmBqDcnxrWnSNr" 
                                    target="_blank" 
                                    class="text-blue-400 hover:underline text-lg">haikaljrpro@gmail.com</a>
@@ -431,7 +649,7 @@
         </div>
     </footer>
 
-    <!-- JavaScript for Navigation and Transitions -->
+    <!-- JavaScript for Navigation, Transitions, and Music Player -->
 <script>
         document.addEventListener('DOMContentLoaded', () => {
             const menuToggle = document.getElementById('menu-toggle');
@@ -440,6 +658,14 @@
             const contentPages = document.querySelectorAll('.content-page');
             const navLinks = document.querySelectorAll('.nav-link');
             const transitionDuration = 500; // Matches CSS transition duration
+            
+            // --- Music Player Elements ---
+            const musicToggleBtn = document.getElementById('music-toggle-btn');
+            const audioPlayer = document.getElementById('audio-player');
+            const playIcon = document.getElementById('play-icon');
+            const pauseIcon = document.getElementById('pause-icon');
+            const musicStatusBar = document.getElementById('music-status-bar');
+            const musicTime = document.getElementById('music-time');
 
             // --- Mobile Menu Logic ---
             const toggleMenu = () => {
@@ -449,14 +675,43 @@
 
             menuToggle.addEventListener('click', toggleMenu);
             closeMenu.addEventListener('click', toggleMenu);
+            
+            // Format time for display (e.g., 0:00)
+            const formatTime = (seconds) => {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = Math.floor(seconds % 60);
+                return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+            };
 
+            // Update UI state based on play/pause
+            const updateMusicUI = (isPlaying) => {
+                if (isPlaying) {
+                    playIcon.classList.add('hidden');
+                    pauseIcon.classList.remove('hidden');
+                    musicStatusBar.classList.add('text-green-400', 'animate-pulse');
+                    musicToggleBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                    musicToggleBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+                } else {
+                    playIcon.classList.remove('hidden');
+                    pauseIcon.classList.add('hidden');
+                    musicStatusBar.classList.remove('text-green-400', 'animate-pulse');
+                    musicToggleBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                    musicToggleBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                }
+            };
 
             // --- Page Switching Logic (Updated for Transitions) ---
             const switchPage = (targetId) => {
                 const currentPage = document.querySelector('.content-page:not(.hidden)');
                 const targetPage = document.querySelector(targetId);
 
-                if (currentPage === targetPage) return; // Already on the page
+                if (currentPage === targetPage) return;
+
+                // Stop music if leaving the Hobby page
+                if (currentPage && currentPage.id === 'hobby' && audioPlayer && !audioPlayer.paused) {
+                    audioPlayer.pause();
+                    updateMusicUI(false);
+                }
 
                 // 3. Update active state of navigation links
                 navLinks.forEach(link => {
@@ -526,49 +781,102 @@
             // Then initiate the switch to show the correct page with a smooth entrance
             switchPage(initialHash);
             
-            console.log("Page transitions and animations have been added.");
-            
-            // --- NEW: Music Player Interaction Logic ---
-            const musicButton = document.getElementById('music-button');
-            const audioPlayer = document.getElementById('audio-player');
-            const originalText = 'Music Lover 🎵';
-            const playingText = 'Playing... 🎶';
-
-            if (musicButton && audioPlayer) {
-                musicButton.addEventListener('click', () => {
+            // --- Music Player Interaction Logic ---
+            if (musicToggleBtn && audioPlayer) {
+                musicToggleBtn.addEventListener('click', () => {
                     if (audioPlayer.paused) {
                         // Attempt to play the audio
                         audioPlayer.play().then(() => {
-                            // Success: update UI
-                            musicButton.textContent = playingText;
-                            // Change color to green and add a pulsing animation
-                            musicButton.classList.remove('bg-blue-100', 'text-blue-800', 'hover:bg-blue-200');
-                            musicButton.classList.add('bg-green-500', 'text-white', 'animate-pulse', 'hover:bg-green-600');
+                            updateMusicUI(true);
                         }).catch(error => {
-                            // Audio playback failed (often due to browser autoplay policies)
                             console.error("Audio playback failed:", error);
-                            // Using a custom modal/message box instead of alert()
-                            // For simplicity here, we'll use a temporary button change
-                            musicButton.textContent = 'Failed 🚫'; 
-                            setTimeout(() => { musicButton.textContent = originalText; }, 3000);
+                            // Simple notification: change button to error color momentarily
+                            musicToggleBtn.classList.add('bg-red-500');
+                            musicToggleBtn.classList.remove('bg-blue-600', 'bg-green-500');
+                            setTimeout(() => { 
+                                updateMusicUI(false); 
+                                musicToggleBtn.classList.add('bg-blue-600');
+                                musicToggleBtn.classList.remove('bg-red-500');
+                            }, 3000);
                         });
                     } else {
                         // Pause the audio
                         audioPlayer.pause();
-                        // Reset UI
-                        musicButton.textContent = originalText;
-                        musicButton.classList.remove('bg-green-500', 'text-white', 'animate-pulse', 'hover:bg-green-600');
-                        musicButton.classList.add('bg-blue-100', 'text-blue-800', 'hover:bg-blue-200');
+                        updateMusicUI(false);
+                    }
+                });
+
+                // Event listeners to update time display
+                audioPlayer.addEventListener('loadedmetadata', () => {
+                    musicTime.textContent = `0:00 / ${formatTime(audioPlayer.duration)}`;
+                });
+
+                audioPlayer.addEventListener('timeupdate', () => {
+                    if (!isNaN(audioPlayer.duration)) {
+                        musicTime.textContent = `${formatTime(audioPlayer.currentTime)} / ${formatTime(audioPlayer.duration)}`;
                     }
                 });
 
                 // Reset UI when the song ends naturally
                 audioPlayer.addEventListener('ended', () => {
-                    musicButton.textContent = originalText;
-                    musicButton.classList.remove('bg-green-500', 'text-white', 'animate-pulse', 'hover:bg-green-600');
-                    musicButton.classList.add('bg-blue-100', 'text-blue-800', 'hover:bg-blue-200');
+                    audioPlayer.currentTime = 0; // Reset to start
+                    updateMusicUI(false);
                 });
+                
+                // Initial check in case the browser preloads metadata
+                audioPlayer.addEventListener('pause', () => updateMusicUI(false));
+                audioPlayer.addEventListener('play', () => updateMusicUI(true));
+                updateMusicUI(audioPlayer.paused === false); // Set initial state
             }
+            
+            
+            // --- Accordion/Toggle Logic ---
+            const setupAccordion = () => {
+                document.querySelectorAll('.accordion-toggle').forEach(toggle => {
+                    // Find the parent item container
+                    const parentItem = toggle.closest('.accordion-item');
+
+                    // Attach click listener to the toggle header
+                    toggle.addEventListener('click', () => {
+                        const targetId = toggle.getAttribute('data-target');
+                        const targetContent = document.getElementById(targetId);
+                        const arrowIcon = toggle.querySelector('.arrow-icon');
+                        
+                        // Check if the music player is in this section and stop it if closing
+                         if (targetId === 'hobby-music' && targetContent.classList.contains('active') && audioPlayer && !audioPlayer.paused) {
+                            audioPlayer.pause();
+                            updateMusicUI(false);
+                        }
+                        
+                        // Toggle the active class on content
+                        targetContent.classList.toggle('active');
+
+                        // Toggle arrow rotation
+                        arrowIcon.classList.toggle('rotate-90');
+
+                        // Toggle parent border/shadow for visual feedback
+                        parentItem.classList.toggle('active-item');
+
+                        // Recalculate max-height on every toggle click
+                        if (targetContent.classList.contains('active')) {
+                            // Set height based on scroll height, plus a buffer
+                            targetContent.style.maxHeight = targetContent.scrollHeight + 150 + "px";
+                        } else {
+                            targetContent.style.maxHeight = 0;
+                        }
+                    });
+
+                    // Initial setup: Max-height needs to be zero explicitly
+                    const targetId = toggle.getAttribute('data-target');
+                    const targetContent = document.getElementById(targetId);
+                    if (targetContent) {
+                         targetContent.style.maxHeight = 0;
+                    }
+                });
+            };
+
+            // Call the accordion setup function
+            setupAccordion();
         });
     </script>
 </body>
